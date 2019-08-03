@@ -7,7 +7,7 @@ import com.pontointeligente.api.entities.Empresa;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.MANDATORY , readOnly = true)
 	public Empresa findByCnpj(String cnpj);
 	
 }

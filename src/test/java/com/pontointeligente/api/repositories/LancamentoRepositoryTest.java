@@ -1,8 +1,9 @@
 package com.pontointeligente.api.repositories;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +14,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.pontointeligente.api.entities.Empresa;
 import com.pontointeligente.api.entities.Funcionario;
+import com.pontointeligente.api.entities.Lancamento;
 import com.pontointeligente.api.enums.PerfilEnum;
+import com.pontointeligente.api.enums.TipoEnum;
 import com.pontointeligente.api.utils.PasswordUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class FuncionarioRepositoryTest {
+public class LancamentoRepositoryTest {
 
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
@@ -27,38 +30,49 @@ public class FuncionarioRepositoryTest {
 	@Autowired
 	private	EmpresaRepository empresaRepository;
 	
+	@Autowired
+	private LancamentoRepository lancamentoRepository;
+	
 	private static final String EMAIL = "andersonalvesoliveira@gmail.com";
+	
 	private static final String CPF = "32306647879";
+	
 	private static final String CNPJ = "51463645000100";
+	
+	private Long funcionarioId;
 	
 	
 	@Before
-	public void setup() throws Exception{
+	public void setup() {
+		
 		Empresa empresa = this.empresaRepository.save(obterDadosEmpresa());
-		this.funcionarioRepository.save(obterDadosFuncionario(empresa));
+		
+		Funcionario funcionario = funcionarioRepository.save(obterDadosFuncionario(empresa));
+		funcionarioId = funcionario.getId();
+		
+		this.lancamentoRepository.save(obterDadosLancamento(funcionario));
+		this.lancamentoRepository.save(obterDadosLancamento(funcionario));		
+		
 	}
-	
+
 	@After
 	public void tearDown() {
-		this.empresaRepository.deleteAll();
+		this.empresaRepository.deleteAll();		
 	}
 	
 	@Test
-	public void testBuscarFuncionarioPorEmail() {
-		Funcionario funcionario = this.funcionarioRepository.findByEmail(EMAIL);
-		assertEquals(EMAIL, funcionario.getEmail());
+	public void testBuscarLancamentoPorFuncionarioId() {
+		List<Lancamento> findByFuncionarioId = this.lancamentoRepository.findByFuncionarioId(funcionarioId);
+		
+		assertEquals(2, findByFuncionarioId.size());
 	}
-	
-	@Test
-	public void testBuscarFuncionarioPorCPF() {
-		Funcionario funcionario = this.funcionarioRepository.findByCpf(CPF);
-		assertEquals(CPF, funcionario.getCpf());
-	}
-	
-	public void testBuscaFuncionarioPorCpfOuEmail() {
-		Funcionario funcionario = this.funcionarioRepository.findByCpfOrEmail(CPF, EMAIL);
-		assertNotNull(funcionario);
-	}
+
+//	@Test
+//	public void testBuscarLancamentoPorFuncionarioIdPaginado() {
+//		PageRequest page = new PageRequest(0,10);		
+//		Page<Lancamento> lancamentos = this.lancamentoRepository.findByFuncionarioId(funcionarioId, page);		
+//		assertEquals(2, lancamentos.getTotalElements());
+//	}
 	
 	private Funcionario obterDadosFuncionario(Empresa empresa) {
 		Funcionario funcionario = new  Funcionario();
@@ -81,4 +95,15 @@ public class FuncionarioRepositoryTest {
 		return empresa; 	
 	}
 
+	private Lancamento obterDadosLancamento(Funcionario funcionario) {
+		
+		Lancamento lancamento = new Lancamento();
+		lancamento.setData(new Date());
+		lancamento.setDescricao("xpto");
+		lancamento.setLocalizacao("Aqui");
+		lancamento.setTipo(TipoEnum.INICIO_ALMOCO);
+		lancamento.setFuncionario(funcionario);
+		return lancamento;
+	}
+	
 }

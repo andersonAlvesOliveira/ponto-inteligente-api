@@ -17,9 +17,9 @@ import com.pontointeligente.api.entities.Lancamento;
 
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
 
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.MANDATORY , readOnly = true)
 	public List<Lancamento> findByFuncionarioId(@Param("funcionarioId") Long funcionarioId);
 	
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.MANDATORY , readOnly = true)
 	public Page<Lancamento> findByFuncionarioId(@Param("funcionarioId") Long funcionarioId , Pageable pageable);
 }

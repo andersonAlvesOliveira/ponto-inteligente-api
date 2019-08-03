@@ -23,7 +23,6 @@ public class EmpresaRepositoryTest {
 	
 	private static final String CNPJ = "51463645000100";
 	
-	
 	@Before
 	public void setup() throws Exception{
 		Empresa empresa = new Empresa();
