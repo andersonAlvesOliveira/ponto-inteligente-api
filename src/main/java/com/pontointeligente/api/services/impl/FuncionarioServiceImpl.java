@@ -22,7 +22,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED , readOnly = false)
 	public Funcionario persistir(Funcionario funcionario) {
 		log.info("Persistindo funcionario {}" , funcionario.toString());
 		return funcionarioRepository.save(funcionario);

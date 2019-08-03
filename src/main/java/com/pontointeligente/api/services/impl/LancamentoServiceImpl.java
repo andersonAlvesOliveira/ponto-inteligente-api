@@ -37,14 +37,14 @@ public class LancamentoServiceImpl implements LancamentoService{
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED , readOnly = false)
 	public Lancamento persitir(Lancamento lancamento) {
 		log.info("Persistindo o lancamento {}" ,lancamento.toString());
 		return this.lancamentoRepository.save(lancamento);
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED , readOnly = false)
 	public void remover(Long id) {
 		log.info("Removendo um lancamento pelo ID {}" ,id);
 		this.lancamentoRepository.deleteById(id);

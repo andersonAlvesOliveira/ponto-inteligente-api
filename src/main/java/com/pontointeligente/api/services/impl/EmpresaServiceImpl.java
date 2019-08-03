@@ -28,7 +28,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED , readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED , readOnly = false)
 	public Empresa persistir(Empresa empresa) {
 		log.info("Persistindo empresa : {}" , empresa);
 		return this.empresaRepository.save(empresa);
